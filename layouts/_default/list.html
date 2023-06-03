@@ -4,18 +4,37 @@
     <h2 class="my:1em">{{ .Title }}</h2>
 
     <ul>
-        {{- range where site.RegularPages "Type" "in" site.Params.mainSections }}
-            {{- if not .Params.hidden }}
-                <li>
-                    <div class="mb:12 py:8 f:fade-30 f:fade-10:hover transition:150ms;ease-in">
-                        <a class="f:18! font:semibold!" href="{{ .Permalink }}">
-                            <div>{{ .Title }}</div>
-                        </a>
-                        <div class="mt:12 f:14 f:fade-60"><time>{{ .Date | time.Format (":date_medium") }}</time></div>
-                    </div>
-                </li>
+        {{ if (eq .Type "tags") }}
+            {{- range $taxonomy := .Site.Taxonomies }}
+                {{ range $tag, $pages := $taxonomy }}
+                    <li>
+                        <div class="mb:12 py:8 f:fade-30">
+                            <a class="f:18! f:fade-10:hover transition:150ms;ease-in font:semibold!" href="/tags/{{ $tag }}">
+                                <div>{{ $tag }}</div>
+                            </a>
+                            <div class="mt:12 f:14 f:fade-60">{{ $pages | len }}</div>
+                        </div>
+                    </li>
+                {{ end }}
             {{- end }}
-        {{- end }}
+        {{ else }}
+            {{ .Type }}
+            {{- range where site.RegularPages "Type" "in" .Type }}
+                {{- if not .Params.hidden }}
+                    <li>
+                        <div class="mb:12 py:8 f:fade-30">
+                            <a class="f:18! f:fade-10:hover transition:150ms;ease-in font:semibold!" href="{{ .Permalink }}">
+                                <div>{{ .Title }}</div>
+                            </a>
+                            <div class="mt:12 f:14 f:fade-60"><time>{{ .Date | time.Format (":date_medium") }}</time></div>
+                            {{ if and (isset .Params "tags") (gt (.Params.tags | len) 0) }}
+                                <div class="mt:12 f:14 f:fade-40">tags: {{ partial "tags.html" . }} </div>
+                            {{ end }}
+                        </div>
+                    </li>
+                {{- end }}
+            {{- end }}
+        {{ end }}
     </ul>
 </div>
 {{ end }}

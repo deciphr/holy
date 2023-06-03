@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div>
+    {{- partial "prose.html" . -}}
+    <h2 class="my:1em">Tags - {{ .Title }}</h2>
+
+    <ul>
+        {{- range .Data.Pages }}
+            {{- if not .Params.hidden }}
+                <li>
+                    <div class="mb:12 py:8 f:fade-30 f:fade-10:hover transition:150ms;ease-in">
+                        <a class="f:18! font:semibold!" href="{{ .Permalink }}">
+                            <div>{{ .Title }}</div>
+                        </a>
+                        <div class="mt:12 f:14 f:fade-60"><time>{{ .Date | time.Format (":date_medium") }}</time></div>
+                    </div>
+                </li>
+            {{- end }}
+        {{- end }}
+    </ul>
+</div>
+{{ end }}
