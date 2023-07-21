@@ -2,7 +2,6 @@
 <div>
     {{- partial "prose.html" . -}}
     <h2 class="my:1em">{{ .Title }}</h2>
-
     <ul>
         {{ if (eq .Type "tags") }}
             {{- range $taxonomy := .Site.Taxonomies }}
@@ -18,7 +17,6 @@
                 {{ end }}
             {{- end }}
         {{ else }}
-            {{ .Type }}
             {{- range where site.RegularPages "Type" "in" .Type }}
                 {{- if not .Params.hidden }}
                     <li>
